@@ -2,12 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stavthon Interpreter</title>
   <style>
-    body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
-    textarea, pre { width: 100%; padding: 10px; font-family: monospace; }
-    textarea { height: 200px; margin-bottom: 10px; }
-    pre { background: #222; color: #eee; overflow-x: auto; }
+    * { box-sizing: border-box; }
+    body { 
+      font-family: sans-serif; 
+      background: #f5f5f5; 
+      padding: 15px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    h1 { font-size: 24px; margin: 0 0 15px 0; }
+    textarea, pre { 
+      width: 100%;
+      padding: 12px;
+      font-family: monospace;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    textarea { 
+      height: 150px;
+      margin-bottom: 15px;
+      resize: vertical;
+    }
+    pre { 
+      background: #222; 
+      color: #eee; 
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:active {
+      background: #0056b3;
+    }
+    @media (min-width: 768px) {
+      body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 25px;
+      }
+      button {
+        width: auto;
+        padding: 12px 24px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -24,12 +74,13 @@ print(y)
 print(z)
 </textarea>
 
-<button onclick="runStavthon()">Run</button>
+<button onclick="runStavthon()">Run Code</button>
 
 <h2>Output:</h2>
 <pre id="output"></pre>
 
 <script>
+// (JavaScript code remains unchanged from original version)
 function runStavthon() {
   const code = document.getElementById('codeInput').value;
   const output = document.getElementById('output');
