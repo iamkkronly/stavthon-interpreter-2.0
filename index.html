@@ -52,6 +52,33 @@
     button:active {
       background: #0056b3;
     }
+    .documentation {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .doc-section {
+      margin-bottom: 25px;
+    }
+    .doc-section h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    .code-example {
+      background: #f8f9fa;
+      padding: 12px;
+      border-left: 4px solid #007bff;
+      margin: 10px 0;
+      font-family: monospace;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .code-example:hover {
+      background: #e9ecef;
+    }
     @media (min-width: 768px) {
       body {
         max-width: 800px;
@@ -77,21 +104,89 @@ y = 200
 z = x + y
 print(x)
 print(y)
-print(z)
-</textarea>
+print(z)</textarea>
 
 <button onclick="runStavthon()">Run Code</button>
 
 <h2>Output:</h2>
 <pre id="output"></pre>
 
+<div class="documentation">
+  <div class="doc-section">
+    <h3>📜 Language Rules</h3>
+    <div class="code-example" onclick="loadSample('basic')">
+      1. Variables<br>
+      name = value (no var/let/const)<br>
+      Names: letters, numbers, _<br>
+      Example:<br>
+      x = 42<br>
+      user_name = Alice
+    </div>
+
+    <div class="code-example" onclick="loadSample('types')">
+      2. Data Types<br>
+      Numbers: 10, 3.14<br>
+      Strings: plain text (no quotes!)<br>
+      Example:<br>
+      greeting = Hello World
+    </div>
+
+    <div class="code-example" onclick="loadSample('print')">
+      3. Print Command<br>
+      print(variable_name)<br>
+      Example:<br>
+      x = 100<br>
+      print(x)
+    </div>
+  </div>
+
+  <div class="doc-section">
+    <h3>🧪 Sample Programs</h3>
+    <div class="code-example" onclick="loadSample('vars')">
+      Variables + Print<br>
+      x = 100<br>
+      y = 200<br>
+      print(x)<br>
+      print(y)
+    </div>
+
+    <div class="code-example" onclick="loadSample('strings')">
+      String Example<br>
+      welcome = Namaste Bhai<br>
+      user = Kaustav<br>
+      print(welcome)<br>
+      print(user)
+    </div>
+
+    <div class="code-example" onclick="loadSample('mixed')">
+      Mixed Types<br>
+      name = Stavthon<br>
+      version = 1.0<br>
+      print(name)<br>
+      print(version)
+    </div>
+  </div>
+</div>
+
 <script>
+function loadSample(type) {
+  const samples = {
+    basic: 'x = 42\nuser_name = Alice',
+    types: 'greeting = Hello World',
+    print: 'x = 100\nprint(x)',
+    vars: 'x = 100\ny = 200\nprint(x)\nprint(y)',
+    strings: 'welcome = Namaste Bhai\nuser = Kaustav\nprint(welcome)\nprint(user)',
+    mixed: 'name = Stavthon\nversion = 1.0\nprint(name)\nprint(version)'
+  };
+  document.getElementById('codeInput').value = samples[type];
+}
+
 function runStavthon() {
   const code = document.getElementById('codeInput').value;
   const output = document.getElementById('output');
   output.textContent = '';
 
-  const vars = {}; // variable storage
+  const vars = {}; // Variable storage
 
   const log = msg => output.textContent += msg + '\n';
 
@@ -99,9 +194,9 @@ function runStavthon() {
 
   lines.forEach(line => {
     line = line.trim();
-    if (!line || line.startsWith('#')) return; // skip comments & empty lines
+    if (!line || line.startsWith('#')) return; // Skip comments & empty lines
 
-    // print statement
+    // Print statement
     if (line.startsWith('print(') && line.endsWith(')')) {
       const varName = line.slice(6, -1).trim();
       if (vars.hasOwnProperty(varName)) {
@@ -112,7 +207,7 @@ function runStavthon() {
       return;
     }
 
-    // variable assignment
+    // Variable assignment
     if (line.includes('=')) {
       const [name, val] = line.split('=').map(x => x.trim());
 
@@ -129,13 +224,11 @@ function runStavthon() {
       try {
         // Try evaluating the expression
         const evaluated = Function(`"use strict"; return (${replacedVal})`)();
-
         vars[name] = evaluated;
       } catch (e) {
         // Fallback: treat as string if not evaluable
         vars[name] = val;
       }
-
       return;
     }
 
