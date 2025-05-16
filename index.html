@@ -2,97 +2,238 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Stavthon Interpreter by Kaustav Ray</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stavthon Interpreter</title>
   <style>
-    body { font-family: sans-serif; padding: 10px; background: #f0f0f0; }
-    textarea, pre { font-family: monospace; width: 100%; box-sizing: border-box; }
-    textarea { height: 200px; padding: 10px; margin-bottom: 10px; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-    pre { background: #222; color: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; }
-    h1, h2 { margin: 10px 0; }
+    * { box-sizing: border-box; }
+    body { 
+      font-family: sans-serif; 
+      background: #f5f5f5; 
+      padding: 15px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    h1 { font-size: 24px; margin: 0 0 5px 0; }
+    .founder {
+      color: #666;
+      font-size: 0.9em;
+      margin: 0 0 15px 0;
+    }
+    textarea, pre { 
+      width: 100%;
+      padding: 12px;
+      font-family: monospace;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    textarea { 
+      height: 150px;
+      margin-bottom: 15px;
+      resize: vertical;
+    }
+    pre { 
+      background: #222; 
+      color: #eee; 
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:active {
+      background: #0056b3;
+    }
+    .documentation {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .doc-section {
+      margin-bottom: 25px;
+    }
+    .doc-section h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    .code-example {
+      background: #f8f9fa;
+      padding: 12px;
+      border-left: 4px solid #007bff;
+      margin: 10px 0;
+      font-family: monospace;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .code-example:hover {
+      background: #e9ecef;
+    }
+    @media (min-width: 768px) {
+      body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 25px;
+      }
+      button {
+        width: auto;
+        padding: 12px 24px;
+      }
+    }
   </style>
 </head>
 <body>
 
-<h1>Stavthon Interpreter v4.0</h1>
-<p><strong>Founder:</strong> Kaustav Ray</p>
+<h1>🧠 Stavthon Interpreter v2.0</h1>
+<p class="founder">Founded by Kaustav Ray</p>
 
-<textarea id="codeInput" placeholder="Write your Stavthon code here...">
-# Sample Code
+<textarea id="codeInput" placeholder="Write some Stavthon code...">
+# Demo with expression
 x = 100
 y = 200
 z = x + y
 print(x)
 print(y)
-print(z)
-</textarea>
+print(z)</textarea>
 
-<button onclick="runStavthon()">Run</button>
+<button onclick="runStavthon()">Run Code</button>
 
 <h2>Output:</h2>
 <pre id="output"></pre>
 
+<div class="documentation">
+  <div class="doc-section">
+    <h3>📜 Language Rules</h3>
+    <div class="code-example" onclick="loadSample('basic')">
+      1. Variables<br>
+      name = value (no var/let/const)<br>
+      Names: letters, numbers, _<br>
+      Example:<br>
+      x = 42<br>
+      user_name = Alice
+    </div>
+
+    <div class="code-example" onclick="loadSample('types')">
+      2. Data Types<br>
+      Numbers: 10, 3.14<br>
+      Strings: plain text (no quotes!)<br>
+      Example:<br>
+      greeting = Hello World
+    </div>
+
+    <div class="code-example" onclick="loadSample('print')">
+      3. Print Command<br>
+      print(variable_name)<br>
+      Example:<br>
+      x = 100<br>
+      print(x)
+    </div>
+  </div>
+
+  <div class="doc-section">
+    <h3>🧪 Sample Programs</h3>
+    <div class="code-example" onclick="loadSample('vars')">
+      Variables + Print<br>
+      x = 100<br>
+      y = 200<br>
+      print(x)<br>
+      print(y)
+    </div>
+
+    <div class="code-example" onclick="loadSample('strings')">
+      String Example<br>
+      welcome = Namaste Bhai<br>
+      user = Kaustav<br>
+      print(welcome)<br>
+      print(user)
+    </div>
+
+    <div class="code-example" onclick="loadSample('mixed')">
+      Mixed Types<br>
+      name = Stavthon<br>
+      version = 1.0<br>
+      print(name)<br>
+      print(version)
+    </div>
+  </div>
+</div>
+
 <script>
+function loadSample(type) {
+  const samples = {
+    basic: 'x = 42\nuser_name = Alice',
+    types: 'greeting = Hello World',
+    print: 'x = 100\nprint(x)',
+    vars: 'x = 100\ny = 200\nprint(x)\nprint(y)',
+    strings: 'welcome = Namaste Bhai\nuser = Kaustav\nprint(welcome)\nprint(user)',
+    mixed: 'name = Stavthon\nversion = 1.0\nprint(name)\nprint(version)'
+  };
+  document.getElementById('codeInput').value = samples[type];
+}
+
 function runStavthon() {
   const code = document.getElementById('codeInput').value;
   const output = document.getElementById('output');
   output.textContent = '';
 
-  const variables = {};
+  const vars = {}; // Variable storage
+
+  const log = msg => output.textContent += msg + '\n';
 
   const lines = code.split('\n');
 
-  for (let line of lines) {
+  lines.forEach(line => {
     line = line.trim();
-
-    if (!line || line.startsWith('#')) continue; // Skip empty lines & comments
+    if (!line || line.startsWith('#')) return; // Skip comments & empty lines
 
     // Print statement
     if (line.startsWith('print(') && line.endsWith(')')) {
       const varName = line.slice(6, -1).trim();
-      if (variables.hasOwnProperty(varName)) {
-        output.textContent += variables[varName] + '\n';
+      if (vars.hasOwnProperty(varName)) {
+        log(vars[varName]);
       } else {
-        output.textContent += `Error: Undefined variable "${varName}"\n`;
+        log(`<<Undefined: ${varName}>>`);
       }
-      continue;
+      return;
     }
 
-    // Variable assignment with optional addition
+    // Variable assignment
     if (line.includes('=')) {
-      const [left, right] = line.split('=').map(s => s.trim());
-      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(left)) {
-        output.textContent += `SyntaxError: Invalid variable name "${left}"\n`;
-        continue;
+      const [name, val] = line.split('=').map(x => x.trim());
+
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+        log(`SyntaxError: Invalid variable name "${name}"`);
+        return;
       }
 
-      let value;
+      // Replace variables in expressions with actual values
+      const replacedVal = val.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
+        return vars.hasOwnProperty(match) ? vars[match] : match;
+      });
 
-      // Handle addition of two variables/numbers
-      if (right.includes('+')) {
-        const [a, b] = right.split('+').map(s => s.trim());
-        const valA = isNaN(a) ? (variables[a] !== undefined ? variables[a] : NaN) : Number(a);
-        const valB = isNaN(b) ? (variables[b] !== undefined ? variables[b] : NaN) : Number(b);
-
-        if (isNaN(valA) || isNaN(valB)) {
-          output.textContent += `RuntimeError: Cannot add non-numeric values in "${line}"\n`;
-          continue;
-        }
-
-        value = valA + valB;
-      } else {
-        // Handle direct assignment (number or string)
-        value = isNaN(right) ? right : Number(right);
+      try {
+        // Try evaluating the expression
+        const evaluated = Function(`"use strict"; return (${replacedVal})`)();
+        vars[name] = evaluated;
+      } catch (e) {
+        // Fallback: treat as string if not evaluable
+        vars[name] = val;
       }
-
-      variables[left] = value;
-      continue;
+      return;
     }
 
-    // Unknown command
-    output.textContent += `SyntaxError: Unrecognized command "${line}"\n`;
-  }
+    log(`SyntaxError: Unknown command "${line}"`);
+  });
 }
 </script>
 
