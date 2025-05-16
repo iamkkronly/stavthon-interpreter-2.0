@@ -3,79 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>Stavthon Interpreter by Kaustav Ray</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
-    textarea, pre { width: 100%; padding: 10px; font-family: monospace; }
-    textarea { height: 200px; margin-bottom: 10px; }
-    pre { background: #222; color: #eee; overflow-x: auto; }
-    h1 { color: #2c3e50; }
-    h2 { color: #2980b9; }
+    body { font-family: sans-serif; padding: 10px; background: #f0f0f0; }
+    textarea, pre { font-family: monospace; width: 100%; box-sizing: border-box; }
+    textarea { height: 200px; padding: 10px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    pre { background: #222; color: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; }
+    h1, h2 { margin: 10px 0; }
   </style>
 </head>
 <body>
 
-<h1>🧠 Stavthon Interpreter v3.5 by Kaustav Ray</h1>
+<h1>Stavthon Interpreter v4.0</h1>
+<p><strong>Founder:</strong> Kaustav Ray</p>
 
-<textarea id="codeInput">
-# Example Program
+<textarea id="codeInput" placeholder="Write your Stavthon code here...">
+# Sample Code
 x = 100
 y = 200
+z = x + y
 print(x)
 print(y)
-
-welcome = Namaste Bhai
-user = Kaustav
-print(welcome)
-print(user)
-
-name = Stavthon
-version = 1.0
-print(name)
-print(version)
+print(z)
 </textarea>
 
-<button onclick="runStavthon()">Run Stavthon</button>
+<button onclick="runStavthon()">Run</button>
 
 <h2>Output:</h2>
 <pre id="output"></pre>
-
-<h2>📜 Language Rules</h2>
-<pre>
-1. Variables
-- Syntax: name = value (no var, no let const nonsense)
-- Names: letters, numbers, underscores (start with letter/_)
-- Example: x = 42 | user_name = Alice
-
-2. Data Types
-- Numbers: 10, 3.14
-- Strings: plain text (no quotes!)
-- Example: greeting = Hello World
-
-3. Print
-- Syntax: print(variable_name)
-- Shows variable value
-
-4. Comments
-- Lines starting with # are ignored
-- Example: # chill bro this is a comment
-
-5. Limitations
-- No loops, no if-else, just simple vars & print
-- Variables stay alive line to line (persistent context)
-</pre>
-
-<h2>✨ Stavthon Vibes</h2>
-<pre>
-- Simple af syntax
-- No eval() risky stuff
-- Cool error msgs
-- Vars & strings handled smartly
-- Single-pass interpreter
-- Persistent vars
-- Perfect for teaching basics
-
-Made with swag by Kaustav Ray (Official Stavthon Founder).
-</pre>
 
 <script>
 function runStavthon() {
@@ -83,59 +39,60 @@ function runStavthon() {
   const output = document.getElementById('output');
   output.textContent = '';
 
-  const vars = {};
-
-  const log = msg => output.textContent += msg + '\n';
+  const variables = {};
 
   const lines = code.split('\n');
 
-  lines.forEach(line => {
+  for (let line of lines) {
     line = line.trim();
-    if (!line || line.startsWith('#')) return;
 
+    if (!line || line.startsWith('#')) continue; // Skip empty lines & comments
+
+    // Print statement
     if (line.startsWith('print(') && line.endsWith(')')) {
       const varName = line.slice(6, -1).trim();
-      if (vars.hasOwnProperty(varName)) {
-        log(vars[varName]);
+      if (variables.hasOwnProperty(varName)) {
+        output.textContent += variables[varName] + '\n';
       } else {
-        log(`<<Undefined: ${varName}>>`);
+        output.textContent += `Error: Undefined variable "${varName}"\n`;
       }
-      return;
+      continue;
     }
 
+    // Variable assignment with optional addition
     if (line.includes('=')) {
-      const [name, rawVal] = line.split('=').map(x => x.trim());
-
-      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
-        log(`SyntaxError: Invalid variable name "${name}"`);
-        return;
+      const [left, right] = line.split('=').map(s => s.trim());
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(left)) {
+        output.textContent += `SyntaxError: Invalid variable name "${left}"\n`;
+        continue;
       }
 
-      // Replace variables with their values
-      let replacedVal = rawVal.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
-        if (vars.hasOwnProperty(match)) {
-          if (typeof vars[match] === 'string') {
-            return `"${vars[match]}"`;
-          } else {
-            return vars[match];
-          }
+      let value;
+
+      // Handle addition of two variables/numbers
+      if (right.includes('+')) {
+        const [a, b] = right.split('+').map(s => s.trim());
+        const valA = isNaN(a) ? (variables[a] !== undefined ? variables[a] : NaN) : Number(a);
+        const valB = isNaN(b) ? (variables[b] !== undefined ? variables[b] : NaN) : Number(b);
+
+        if (isNaN(valA) || isNaN(valB)) {
+          output.textContent += `RuntimeError: Cannot add non-numeric values in "${line}"\n`;
+          continue;
         }
-        return match;
-      });
 
-      try {
-        const evaluated = Function(`"use strict"; return (${replacedVal})`)();
-        vars[name] = evaluated;
-      } catch (e) {
-        // If fails, treat as raw string
-        vars[name] = rawVal;
+        value = valA + valB;
+      } else {
+        // Handle direct assignment (number or string)
+        value = isNaN(right) ? right : Number(right);
       }
 
-      return;
+      variables[left] = value;
+      continue;
     }
 
-    log(`SyntaxError: Unknown command "${line}"`);
-  });
+    // Unknown command
+    output.textContent += `SyntaxError: Unrecognized command "${line}"\n`;
+  }
 }
 </script>
 
