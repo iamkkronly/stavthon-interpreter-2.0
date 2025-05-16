@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stavthon Interpreter</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
+    textarea, pre { width: 100%; padding: 10px; font-family: monospace; }
+    textarea { height: 200px; margin-bottom: 10px; }
+    pre { background: #222; color: #eee; overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+<h1>🧠 Stavthon Interpreter v2.0</h1>
+
+<textarea id="codeInput" placeholder="Write some Stavthon code...">
+# Demo with expression
+x = 100
+y = 200
+z = x + y
+print(x)
+print(y)
+print(z)
+</textarea>
+
+<button onclick="runStavthon()">Run</button>
+
+<h2>Output:</h2>
+<pre id="output"></pre>
+
+<script>
+function runStavthon() {
+  const code = document.getElementById('codeInput').value;
+  const output = document.getElementById('output');
+  output.textContent = '';
+
+  const vars = {}; // variable storage
+
+  const log = msg => output.textContent += msg + '\n';
+
+  const lines = code.split('\n');
+
+  lines.forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return; // skip comments & empty lines
+
+    // print statement
+    if (line.startsWith('print(') && line.endsWith(')')) {
+      const varName = line.slice(6, -1).trim();
+      if (vars.hasOwnProperty(varName)) {
+        log(vars[varName]);
+      } else {
+        log(`<<Undefined: ${varName}>>`);
+      }
+      return;
+    }
+
+    // variable assignment
+    if (line.includes('=')) {
+      const [name, val] = line.split('=').map(x => x.trim());
+
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+        log(`SyntaxError: Invalid variable name "${name}"`);
+        return;
+      }
+
+      // Replace variables in expressions with actual values
+      const replacedVal = val.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
+        return vars.hasOwnProperty(match) ? vars[match] : match;
+      });
+
+      try {
+        // Try evaluating the expression
+        const evaluated = Function(`"use strict"; return (${replacedVal})`)();
+
+        vars[name] = evaluated;
+      } catch (e) {
+        // Fallback: treat as string if not evaluable
+        vars[name] = val;
+      }
+
+      return;
+    }
+
+    log(`SyntaxError: Unknown command "${line}"`);
+  });
+}
+</script>
+
+</body>
+</html>
