@@ -23,7 +23,8 @@ Example: greeting = Hello World
 
 3. Print
 
-Syntax: print(variable_name)
+Syntax: print(variable_name) 
+
 Shows variable value
 
 
