@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stavthon Interpreter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🧠 Stavthon Interpreter v2.1</title>
   <style>
     * { box-sizing: border-box; }
     body { 
@@ -94,17 +94,36 @@
 </head>
 <body>
 
-<h1>🧠 Stavthon Interpreter v2.0</h1>
+<h1>🧠 Stavthon Interpreter v2.1</h1>
 <p class="founder">Founded by Kaustav Ray</p>
 
 <textarea id="codeInput" placeholder="Write some Stavthon code...">
-# Demo with expression
-x = 100
-y = 200
-z = x + y
-print(x)
-print(y)
-print(z)</textarea>
+# Variables with numbers
+a = 50
+b = 25
+c = a * 2 + b / 5
+
+# Variables with strings
+firstName = John
+lastName = Doe
+
+# Mixed usage
+fullName = firstName + " " + lastName
+
+# More calculations
+d = (a + b) * 3 - 10
+e = d / 2 + c
+
+# Print outputs
+print(a)
+print(b)
+print(c)
+print(d)
+print(e)
+print(fullName)
+
+# Invalid variable to test error
+print(not_defined_var)</textarea>
 
 <button onclick="runStavthon()">Run Code</button>
 
@@ -217,18 +236,25 @@ function runStavthon() {
       }
 
       // Replace variables in expressions with actual values
-      const replacedVal = val.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
+      let replacedVal = val.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
         return vars.hasOwnProperty(match) ? vars[match] : match;
       });
 
       try {
-        // Try evaluating the expression
-        const evaluated = Function(`"use strict"; return (${replacedVal})`)();
-        vars[name] = evaluated;
+        // Evaluate using Function
+        const evaluated = Function('"use strict"; return (' + JSON.stringify(replacedVal) + ')')();
+
+        // If it's a valid number, store as number
+        if (!isNaN(evaluated)) {
+          vars[name] = Number(evaluated);
+        } else {
+          vars[name] = evaluated;
+        }
       } catch (e) {
-        // Fallback: treat as string if not evaluable
+        // Fallback: treat as plain string
         vars[name] = val;
       }
+
       return;
     }
 
