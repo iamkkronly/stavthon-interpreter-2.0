@@ -2,62 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🧠 Stavthon Interpreter v2.1</title>
+  <title>🧠 Stavthon Interpreter v3.2 - Fully Documented</title>
   <style>
-    * { box-sizing: border-box; }
-    body { 
-      font-family: sans-serif; 
-      background: #f5f5f5; 
-      padding: 15px;
-      font-size: 16px;
-      line-height: 1.5;
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
     }
-    h1 { font-size: 24px; margin: 0 0 5px 0; }
-    .founder {
+    h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    p.founder {
       color: #666;
-      font-size: 0.9em;
-      margin: 0 0 15px 0;
-    }
-    textarea, pre { 
-      width: 100%;
-      padding: 12px;
-      font-family: monospace;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-    }
-    textarea { 
-      height: 150px;
-      margin-bottom: 15px;
-      resize: vertical;
-    }
-    pre { 
-      background: #222; 
-      color: #eee; 
-      overflow-x: auto;
       font-size: 14px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      margin-bottom: 10px;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      background: #007bff;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 6px;
-      font-size: 18px;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    button:active {
-      background: #0056b3;
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      white-space: pre-wrap;
     }
-    .documentation {
+    .docs {
       margin-top: 30px;
       padding: 20px;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 15px;
     }
     .doc-section {
       margin-bottom: 25px;
@@ -67,45 +59,31 @@
       margin-bottom: 10px;
       font-size: 1.2em;
     }
-    .code-example {
-      background: #f8f9fa;
-      padding: 12px;
+    code {
+      display: block;
+      background: #f1f1f1;
+      padding: 10px;
       border-left: 4px solid #007bff;
       margin: 10px 0;
       font-family: monospace;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .code-example:hover {
-      background: #e9ecef;
-    }
-    @media (min-width: 768px) {
-      body {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 25px;
-      }
-      button {
-        width: auto;
-        padding: 12px 24px;
-      }
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
 
-<h1>🧠 Stavthon Interpreter v2.1</h1>
+<h1>🧠 Stavthon Interpreter v3.2</h1>
 <p class="founder">Founded by Kaustav Ray</p>
 
-<textarea id="codeInput" placeholder="Write some Stavthon code...">
+<textarea id="codeInput">
 # Variables with numbers
 a = 50
 b = 25
 c = a * 2 + b / 5
 
 # Variables with strings
-firstName = John
-lastName = Doe
+firstName = "John"
+lastName = "Doe"
 
 # Mixed usage
 fullName = firstName + " " + lastName
@@ -125,97 +103,112 @@ print(fullName)
 # Invalid variable to test error
 print(not_defined_var)</textarea>
 
-<button onclick="runStavthon()">Run Code</button>
+<button onclick="runStavthon()">Run Stavthon</button>
 
 <h2>Output:</h2>
 <pre id="output"></pre>
 
-<div class="documentation">
+<div class="docs">
+  <h3>📜 Language Rules</h3>
+
   <div class="doc-section">
-    <h3>📜 Language Rules</h3>
-    <div class="code-example" onclick="loadSample('basic')">
-      1. Variables<br>
-      name = value (no var/let/const)<br>
-      Names: letters, numbers, _<br>
-      Example:<br>
-      x = 42<br>
-      user_name = Alice
-    </div>
-
-    <div class="code-example" onclick="loadSample('types')">
-      2. Data Types<br>
-      Numbers: 10, 3.14<br>
-      Strings: plain text (no quotes!)<br>
-      Example:<br>
-      greeting = Hello World
-    </div>
-
-    <div class="code-example" onclick="loadSample('print')">
-      3. Print Command<br>
-      print(variable_name)<br>
-      Example:<br>
-      x = 100<br>
-      print(x)
-    </div>
+    <h3>1. Variables</h3>
+    <p>Syntax: name = value (no var, no let const nonsense)</p>
+    <p><strong>Names</strong>: letters, numbers, underscores (start with letter/_)</p>
+    <code>x = 42<br>user_name = Alice</code>
   </div>
 
   <div class="doc-section">
-    <h3>🧪 Sample Programs</h3>
-    <div class="code-example" onclick="loadSample('vars')">
-      Variables + Print<br>
-      x = 100<br>
-      y = 200<br>
-      print(x)<br>
-      print(y)
-    </div>
-
-    <div class="code-example" onclick="loadSample('strings')">
-      String Example<br>
-      welcome = Namaste Bhai<br>
-      user = Kaustav<br>
-      print(welcome)<br>
-      print(user)
-    </div>
-
-    <div class="code-example" onclick="loadSample('mixed')">
-      Mixed Types<br>
-      name = Stavthon<br>
-      version = 1.0<br>
-      print(name)<br>
-      print(version)
-    </div>
+    <h3>2. Data Types</h3>
+    <p><strong>Numbers</strong>: 10, 3.14</p>
+    <p><strong>Strings</strong>: plain text (no quotes!)</p>
+    <code>greeting = Hello World</code>
   </div>
+
+  <div class="doc-section">
+    <h3>3. Print</h3>
+    <p>Syntax: print(variable_name)<br>Shows variable value</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>4. Comments</h3>
+    <p>Lines starting with <code>#</code> are ignored</p>
+    <code># chill bro this is a comment</code>
+  </div>
+
+  <div class="doc-section">
+    <h3>5. Limitations</h3>
+    <ul>
+      <li>No loops</li>
+      <li>No if-else</li>
+      <li>Just simple bhaukaal vars & print</li>
+    </ul>
+    <p><strong>Variables stay alive line to line</strong> (persistent context)</p>
+  </div>
+
+  <h3>🧪 Sample Programs</h3>
+
+  <div class="doc-section">
+    <h3>Variables + Print</h3>
+    <code>
+x = 100<br>
+y = 200<br>
+print(x)<br>
+print(y)
+    </code>
+  </div>
+
+  <div class="doc-section">
+    <h3>String Example</h3>
+    <code>
+welcome = Namaste Bhai<br>
+user = Kaustav<br>
+print(welcome)<br>
+print(user)
+    </code>
+  </div>
+
+  <div class="doc-section">
+    <h3>Numbers & Strings Mixed</h3>
+    <code>
+name = Stavthon<br>
+version = 1.0<br>
+print(name)<br>
+print(version)
+    </code>
+  </div>
+
+  <h3>📝 Design Notes</h3>
+  <ul>
+    <li>Simple af syntax</li>
+    <li>No eval() risky stuff</li>
+    <li>Cool error msgs</li>
+    <li>Variabes & strings handled smartly</li>
+    <li>Single-pass interpreter</li>
+    <li>Persistent vars</li>
+    <li>Perfect for teaching basics</li>
+  </ul>
 </div>
 
 <script>
-function loadSample(type) {
-  const samples = {
-    basic: 'x = 42\nuser_name = Alice',
-    types: 'greeting = Hello World',
-    print: 'x = 100\nprint(x)',
-    vars: 'x = 100\ny = 200\nprint(x)\nprint(y)',
-    strings: 'welcome = Namaste Bhai\nuser = Kaustav\nprint(welcome)\nprint(user)',
-    mixed: 'name = Stavthon\nversion = 1.0\nprint(name)\nprint(version)'
-  };
-  document.getElementById('codeInput').value = samples[type];
-}
-
 function runStavthon() {
   const code = document.getElementById('codeInput').value;
   const output = document.getElementById('output');
   output.textContent = '';
 
-  const vars = {}; // Variable storage
+  const vars = {};
 
-  const log = msg => output.textContent += msg + '\n';
+  function log(msg) {
+    output.textContent += msg + '\n';
+  }
 
   const lines = code.split('\n');
 
-  lines.forEach(line => {
+  for (let line of lines) {
     line = line.trim();
-    if (!line || line.startsWith('#')) return; // Skip comments & empty lines
+    if (!line || line.startsWith('#')) continue;
 
-    // Print statement
+    // Handle print statement
     if (line.startsWith('print(') && line.endsWith(')')) {
       const varName = line.slice(6, -1).trim();
       if (vars.hasOwnProperty(varName)) {
@@ -223,43 +216,52 @@ function runStavthon() {
       } else {
         log(`<<Undefined: ${varName}>>`);
       }
-      return;
+      continue;
     }
 
-    // Variable assignment
+    // Handle variable assignment
     if (line.includes('=')) {
-      const [name, val] = line.split('=').map(x => x.trim());
+      const [name, expr] = line.split('=').map(part => part.trim());
 
       if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
         log(`SyntaxError: Invalid variable name "${name}"`);
-        return;
+        continue;
       }
 
-      // Replace variables in expressions with actual values
-      let replacedVal = val.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, match => {
-        return vars.hasOwnProperty(match) ? vars[match] : match;
+      // If it's a quoted string, store directly
+      if (/^".*"$|^'.*'$/.test(expr)) {
+        vars[name] = expr.slice(1, -1); // Remove quotes
+        continue;
+      }
+
+      // Replace known variables in expression
+      let evaluatedExpr = expr.replace(/([a-zA-Z_][a-zA-Z0-9_]*)/g, (_, match) => {
+        if (vars.hasOwnProperty(match)) {
+          const val = vars[match];
+          return typeof val === 'string' ? `"${val}"` : val;
+        }
+        return `'undefined'`;
       });
 
       try {
         // Evaluate using Function
-        const evaluated = Function('"use strict"; return (' + JSON.stringify(replacedVal) + ')')();
+        const result = Function('"use strict"; return (' + evaluatedExpr + ')')();
 
-        // If it's a valid number, store as number
-        if (!isNaN(evaluated)) {
-          vars[name] = Number(evaluated);
+        if (result === 'undefined') {
+          log(`Error: Undefined variable used in "${line}"`);
         } else {
-          vars[name] = evaluated;
+          vars[name] = result;
         }
       } catch (e) {
-        // Fallback: treat as plain string
-        vars[name] = val;
+        // Fallback: treat as raw string
+        vars[name] = expr;
       }
 
-      return;
+      continue;
     }
 
     log(`SyntaxError: Unknown command "${line}"`);
-  });
+  }
 }
 </script>
 
